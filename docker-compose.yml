@@ -1,0 +1,101 @@
+version: '3'
+
+services:
+  zookeeper:
+    container_name: zookeeper
+    image: wurstmeister/zookeeper
+    network_mode: "host"
+    restart: unless-stopped
+
+  kafka:
+    container_name: kafka
+    image: wurstmeister/kafka
+
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_ADVERTISED_HOST_NAME: localhost
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_ZOOKEEPER_CONNECT: localhost:2181
+    network_mode: "host"
+    depends_on:
+      - zookeeper
+    restart: always
+
+  kafka2:
+    container_name: kafka2
+    image: wurstmeister/kafka
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9093
+      KAFKA_ADVERTISED_HOST_NAME: localhost
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_LISTENERS: PLAINTEXT://localhost:9093
+      KAFKA_ZOOKEEPER_CONNECT: localhost:2181
+    network_mode: "host"
+    depends_on:
+      - zookeeper
+    restart: always
+       
+  kafka-ui:
+    container_name: kafka-ui
+    image: provectuslabs/kafka-ui
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local-kafka
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: localhost:9092
+      KAFKA_CLUSTERS_0_ZOOKEEPER: localhost:2181
+    network_mode: "host"
+    depends_on:
+      - kafka
+      - kafka2
+    restart: unless-stopped
+
+  # bot:
+  #   build:
+  #     context: bot_notification/
+  #     dockerfile: Dockerfile
+  #   network_mode: "host"
+  #   depends_on:
+  #     - kafka
+  #     - kafka2
+  
+  email:
+    container_name: email-notfication
+    build:
+      context: Notifications/email_notification/
+      dockerfile: Dockerfile
+    network_mode: "host"
+    depends_on:
+      - room_booking
+    restart: unless-stopped
+ 
+  database:
+    image: postgres:latest
+    container_name: database
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: roombookingdb
+    network_mode: "host"
+  restart: unless-stopped
+
+  room_booking:
+    build:
+      context: RoomBooking/
+      dockerfile: Dockerfile
+    network_mode: "host"
+    depends_on:
+      - database 
+      - kafka-ui
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: Frontend/
+      dockerfile: Dockerfile
+    network_mode: "host"
+    depends_on:
+      - kafka-ui
+    restart: unless-stopped
+

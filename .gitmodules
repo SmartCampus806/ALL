@@ -6,5 +6,6 @@
 	path = Notifications
 	url = git@github.com:SmartCampus806/notification.git
 [submodule "Frontend"]
+	branch = test_info_block
 	path = Frontend
 	url = git@github.com:hell-lumpen/room-booking-vite.git

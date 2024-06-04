@@ -9,3 +9,9 @@ git submodule update
 ```
 git submodule update --remote
 ```
+
+# Репозитории:
+- [Frontend](https://github.com/hell-lumpen/room-booking-vite) //Вынести в организацию
+- [RoomBooking](https://github.com/SmartCampus806/RoomBooking)
+- [Analytics](https://github.com/hell-lumpen/sc-analytics) //Вынести в организацию
+- [Notifications](https://github.com/SmartCampus806/notification)

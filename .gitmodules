@@ -1,0 +1,4 @@
+[submodule "RoomBooking"]
+	branch = master
+	path = RoomBooking
+	url = https://github.com/SmartCampus806/RoomBooking

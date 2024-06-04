@@ -2,3 +2,6 @@
 	branch = master
 	path = RoomBooking
 	url = https://github.com/SmartCampus806/RoomBooking
+[submodule "Notifications"]
+	path = Notifications
+	url = git@github.com:SmartCampus806/notification.git

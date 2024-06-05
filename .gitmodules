@@ -1,7 +1,7 @@
 [submodule "RoomBooking"]
 	branch = master
 	path = RoomBooking
-	url = https://github.com/SmartCampus806/RoomBooking
+	url = git@github.com/SmartCampus806/RoomBooking.git
 [submodule "Notifications"]
 	path = Notifications
 	url = git@github.com:SmartCampus806/notification.git
